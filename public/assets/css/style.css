@@ -195,44 +195,14 @@ nav .container .btn {
 	box-shadow: 0 0 0 3px rgba(102, 102, 102, 0.7);
 }
 
-/*Post*/
-
-.modal {
-	display: none;
-	position: fixed;
-	z-index: 2 !important;
-	align-items: center;
-	background-color: rgb(0, 0, 0);
-	background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal .post {
-	height: 500px;
-	overflow-y: scroll;
-}
-
-.cmt-section {
-	border-bottom: 1px solid #000000;
-}
+/*Post's Comments*/
 
 .cmt-section .btn-ops {
 	display: none;
 }
 
-.close {
-	color: #aaaaaa;
-	float: right;
-	font-size: 28px;
-	font-weight: bold;
-}
-.z-3 {
-	z-index: 3;
-}
-.close:hover,
-.close:focus {
-	color: #000000;
-	text-decoration: none;
-	cursor: pointer;
+.cmt-section:hover .btn-ops {
+	display: block;
 }
 
 /*Additional Styling*/

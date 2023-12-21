@@ -23,7 +23,6 @@
 							<path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
 						</svg>
 					</button>
-
 				</form>
 			</div>
 
@@ -40,15 +39,41 @@
 				<div class="post-btn d-flex p-3 align-items-center text-black bg-blueish1">
 					<div class="heart-content ms-2 @if (auth()->user()->likes->where('post_id', $post->id)->count()) liked @endif">
 						<div class="btn-heart d-inline">
-							<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-heart position-absolute mx-auto cursor-pointer" viewBox="0 0 16 16">
-								<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
-							</svg>
-							<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" id="heartIcon" class="bi bi-heart-fill @if (auth()->user()->likes->where('post_id', $post->id)->count()) color-red @endif" viewBox="0 0 16 16">
-								<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
-							</svg>
-							<div class="btn-info fs-8 fw-semibold px-2">Aku bersamamu!</div>
+							@if (auth()->user()->likes->where('post_id', $post->id)->count())
+							<form action="/posts/{{ $post->id }}/likes" method="post">
+								@method('delete')
+								@csrf
+								<input type="hidden" name="current_url" value="{{ url()->current() }}">
+								<button type="submit" class="btn btn-none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-heart position-absolute mx-auto cursor-pointer" viewBox="0 0 16 16">
+										<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" id="heartIcon" class="bi bi-heart-fill color-red" viewBox="0 0 16 16">
+										<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+									</svg>
+									<div class="btn-info fs-8 fw-semibold px-2">Aku bersamamu!</div>
+									<span class="ms-2 fs-6 fw-semibold mx-auto cursor-default">{{ $post->likeCountShortened() }}</span>
+								</button>
+							</form>
+
+							@else
+							<form action="/posts/{{ $post->id }}/likes" method="post">
+								@csrf
+								<input type="hidden" name="current_url" value="{{ url()->current() }}">
+								<button type="submit" class="btn btn-none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-heart position-absolute mx-auto cursor-pointer" viewBox="0 0 16 16">
+										<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" id="heartIcon" class="bi bi-heart-fill" viewBox="0 0 16 16">
+										<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+									</svg>
+									<div class="btn-info fs-8 fw-semibold px-2">Aku bersamamu!</div>
+									<span class="ms-2 fs-6 fw-semibold mx-auto cursor-default">{{ $post->likeCountShortened() }}</span>
+								</button>
+							</form>
+							@endif
+
 						</div>
-						<span class="ms-2 fs-6 fw-semibold mx-auto cursor-default">{{ $post->likeCountShortened() }}</span>
 						
 						@if($post->likes->count())
 						<div class="count-info fs-8 fw-semibold px-2">{{ $post->likeCountFormatted() }} orang mendukung {{ $post->user->name }}</div>
@@ -72,8 +97,6 @@
 						<div class="count-info fs-8 fw-semibold px-2">{{ $post->commentCountFormatted() }} orang mengomentari ini</div>
 						@endif
 
-						<modals class="modal {{ $post->id == 1 ? 'd-block':'' }}">@include('partials.post')</modals>		
-
 					</div>
 					<div class="btn-ops cursor-pointer ms-auto">
 						<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
@@ -95,9 +118,11 @@
 					</div>
 				</div>
 				<div class="form-cmt p-3 bg-blueish2">
-					<form role="comment">
+					<form action="/posts/{{ $post->id }}/comments" method="post" role="comment">
+						@csrf
+						<input type="hidden" name="current_url" value="{{ url()->current() }}">
 						<div class="input-group">
-							<textarea class="form-control shadow lh-1" type="search" placeholder="Beri komentar..." rows="1"></textarea>
+							<textarea class="form-control shadow lh-1" type="search" placeholder="Beri komentar..." rows="1" name="body"></textarea>
 							<button class="btn d-flex align-items-center" type="submit">
 								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="black" class="bi bi-send-fill position-absolute" viewBox="0 0 16 16">
 									<path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>

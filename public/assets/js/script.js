@@ -1,11 +1,9 @@
 $(document).ready(function () {
-	$(".btn-cmt").on("click", function () {
-		// var targetUrl = $(this).data("href");
-		// window.location.href = targetUrl;
-		console.log('cmt diklik');
-		$(this).find("modals.modal").addClass("d-block");
+	$(".btn-cmt .cursor-pointer").on("click", function () {
+		var targetUrl = $(this).data("href");
+		window.location.href = targetUrl;
 	});
-	$(".post-body > p").each(function () {
+	$(".post-body > p, .cmt-section > p").each(function () {
 		var content = $(this).text();
 		var tags = Array.from(new Set(content.match(/#[^\s\<\#]+/g)));
 
@@ -13,12 +11,11 @@ $(document).ready(function () {
 	        var tempContainer = $('<p></p>');
 
 	        tags.forEach(function (tag) {
-	            var link = '<a href="/posts?tag=' + tag.slice(1) + ' class="text-decoration-none fw-semibold text-blueish">' + tag + '</a>';
-	            tempContainer.html(content);  // Mengganti konten sementara dengan teks saat ini
-	            content = tempContainer.html().replace(new RegExp(tag, 'g'), link);  // Menggantikan semua kemunculan tagar
+	            var link = '<a href="/posts?tag=' + tag.slice(1) + '" class="text-decoration-none fw-semibold text-blueish">' + tag + '</a>';
+	            tempContainer.html(content);
+	            content = tempContainer.html().replace(new RegExp(tag, 'g'), link);
 	        });
-
-	        $(this).html(content);  // Menetapkan kembali konten paragraf dengan hasil perubahan
+	        $(this).html(content);
 	    }
 
 		$(this).data("original-content", content);
@@ -39,18 +36,12 @@ $(document).ready(function () {
 
 		postBody.html(originalContent);
 	});
-	$(".btn-heart").on("click", function() {
+	$(".cmt-section > p").on("click", ".read-more", function () {
+		var cmtBody = $(this).closest(".cmt-section > p");
+		var originalContent = cmtBody.data("original-content");
 
-		if ($(this).hasClass("liked")) {
-			$(this).removeClass("liked")
-			$(this).find("#heartIcon").removeClass("color-red");
-		} else {
-			$(this).addClass("liked")
-			$(this).find("#heartIcon").addClass("color-red");
-		}
-	});
-	$(".cmt-section:hover").on("click", function() {
-		$(this).find(".btn-ops").addClass("d-block");
+
+		cmtBody.html(originalContent);
 	});
 	$(".btn-ops, .profile").on("click", function (e) {
 		$(".menu").not($(this).find(".menu")).hide();
@@ -68,21 +59,5 @@ $(document).ready(function () {
 		if (!$(e.target).closest(".navbar-toggler").length) {
 			$(".navbar-collapse").collapse("hide");
 		}
-		// if (!$(e.target).closest("modals.modal").length) {
-		// 	$("modals").removeClass("d-block");
-		// }
 	});
 });
-function likePost(postId) {
-        $.ajax({
-            url: '/like-post',
-            method: 'POST',
-            data: { post_id: postId },
-            success: function (data) {
-                if (data.success) {
-                    // Perbarui jumlah like secara dinamis
-                    $('#like-count-' + postId).text(data.like_count);
-                }
-            }
-        });
-    }
